@@ -13,16 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->enum('role', ['general_user', 'employee', 'office', 'admin'])->default('general_user');
+            $table->string('whatsapp')->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('2FA')->default(0);
+            $table->enum('locale', ['en', 'ar'])->default('ar');
+            $table->timestamp('whatsapp_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->string('whatsapp')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
