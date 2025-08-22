@@ -32,6 +32,12 @@ class RegisterOfficeRequest extends FormRequest
             'work_cities' => ['required', 'string', 'max:100'],
             'employees_number' => ['required', 'integer', 'min:1'],
             'logo' => ['file', 'mimes:png,jpg', 'max:2048'],
+            'work_times' => ['array', 'max:7'],
+            'whatsapp_link' => ['string'],
+            'facebook_link' => ['string'],
+            'twitter_link' => ['string'],
+            'instagram_link' => ['string'],
+            'telegram_link' => ['string'],
             'whatsapp' => ['required', 'string', 'unique:users,whatsapp'],
             'email'    => ['required', 'email',  'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', Password::min(8)
@@ -50,11 +56,10 @@ class RegisterOfficeRequest extends FormRequest
                 $user = User::create($this->validated());
                 $user->forceFill(['role' => 'office']);
                 $user->save();
-                $user->office()->create($this->except(['whatsapp', 'email', 'password', 'password_confirmation']));
+                $user->office()->create($this->except(['whatsapp', 'email', 'password', 'password_confirmation', 'work_times', 'whatsapp_link', 'facebook_link', 'twitter_link', 'instagram_link', 'telegram_link']));
                 return $this->generalResponse(null, 'Whatsapp Check', 201);
             }
             return $this->generalResponse(null, 'error_400', 400);
-
         });
     }
 }

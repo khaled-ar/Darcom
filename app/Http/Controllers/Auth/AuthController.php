@@ -10,7 +10,6 @@ use App\Http\Requests\Auth\{
     Verify2FARequest,
     VerifyAccountRequest,
 };
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
