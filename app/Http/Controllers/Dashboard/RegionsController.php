@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Regions\StoreRegionRequest;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
 class RegionsController extends Controller
@@ -13,7 +14,7 @@ class RegionsController extends Controller
      */
     public function index()
     {
-        //
+        // return $this->generalResponse(Region::all());
     }
 
     /**
@@ -43,8 +44,9 @@ class RegionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Region $region)
     {
-        //
+        $region->delete();
+        return $this->generalResponse(null, 'Deleted Successfully', 200);
     }
 }

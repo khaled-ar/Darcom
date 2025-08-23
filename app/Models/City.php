@@ -13,4 +13,7 @@ class City extends Model
         'updated_at'
     ];
 
+    public function regions() {
+        return $this->hasMany(Region::class);
+    }
 }

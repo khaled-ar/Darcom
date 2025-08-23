@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Cities\{
     StoreCityRequest,
 };
+use App\Models\City;
 use Illuminate\Http\Request;
 
 class CitiesController extends Controller
@@ -15,7 +16,7 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        //
+        return $this->generalResponse(City::with('regions')->get());
     }
 
     /**
@@ -45,8 +46,9 @@ class CitiesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(City $city)
     {
-        //
+        $city->delete();
+        return $this->generalResponse(null, 'Deleted Successfully', 200);
     }
 }

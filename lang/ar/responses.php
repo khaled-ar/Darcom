@@ -12,5 +12,6 @@ return [
     'Account Verified' => 'تم التحقق من الحساب بنجاح',
     'Wrong Code' => 'الرمز المدخل خاطئ',
     'Wrong Credentials' => 'بيانات تسجيل الدخول غير صحيحة',
-    'Updated Successfully' => 'تم التحديث بنجاح'
+    'Updated Successfully' => 'تم التحديث بنجاح',
+    'Deleted Successfully' => 'تم الحذف بنجاح',
 ];

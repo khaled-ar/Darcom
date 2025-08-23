@@ -17,7 +17,7 @@ class Admin
     {
         if($request->user()->role != 'admin') {
             return response()->json([
-                __('responses.error_403')
+                'message' => __('responses.error_403')
             ], 403);
         }
         return $next($request);

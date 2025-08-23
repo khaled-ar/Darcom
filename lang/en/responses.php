@@ -12,5 +12,6 @@ return [
     'Account Verified' => 'Account Verified Suuccessfully',
     'Wrong Code' => 'Wrong Code!',
     'Wrong Credentials' => 'Wrong Credentials!',
-    'Updated Successfully' => 'Updated Successfully'
+    'Updated Successfully' => 'Updated Successfully',
+    'Deleted Successfully' => 'Deleted Successfully',
 ];
