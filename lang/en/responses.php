@@ -11,5 +11,6 @@ return [
     'Whatsapp Check' => 'Verification code has been sent via WhatsApp, please check',
     'Account Verified' => 'Account Verified Suuccessfully',
     'Wrong Code' => 'Wrong Code!',
-    'Wrong Credentials' => 'Wrong Credentials!'
+    'Wrong Credentials' => 'Wrong Credentials!',
+    'Updated Successfully' => 'Updated Successfully'
 ];

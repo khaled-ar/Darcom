@@ -11,5 +11,6 @@ return [
     'Whatsapp Check' => 'تم ارسال رمز التحقق عبر الواتساب، يرجى التحقق',
     'Account Verified' => 'تم التحقق من الحساب بنجاح',
     'Wrong Code' => 'الرمز المدخل خاطئ',
-    'Wrong Credentials' => 'بيانات تسجيل الدخول غير صحيحة'
+    'Wrong Credentials' => 'بيانات تسجيل الدخول غير صحيحة',
+    'Updated Successfully' => 'تم التحديث بنجاح'
 ];
