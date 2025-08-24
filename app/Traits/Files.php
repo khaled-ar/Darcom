@@ -20,7 +20,7 @@ trait Files {
 
     // This function do image delation.
     public static function deleteFile($path) {
-        if(file_exists($path)) {
+        if(file_exists($path) && !is_dir($path)) {
             unlink($path);
         }
     }

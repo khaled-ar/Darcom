@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('lang')->group(function() {
@@ -21,6 +22,9 @@ Route::middleware('lang')->group(function() {
         Route::prefix('profile')->group(function() {
             include base_path('routes/profile.php');
         });
+
+        // Blogs Routes
+        Route::apiResource('blogs', BlogsController::class);
     });
 
 
