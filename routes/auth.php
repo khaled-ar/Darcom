@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 
 Route::controller(AuthController::class)->group(function() {
     Route::post('register/general-user', 'register_general_user');
