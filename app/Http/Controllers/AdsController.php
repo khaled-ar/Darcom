@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Dashboard\Blogs\{
-    DeleteBlogRequest,
-    StoreBlogRequest
+use App\Http\Requests\Dashboard\Ads\{
+    DeleteAdRequest,
+    StoreAdRequest,
 };
-use App\Models\Blog;
+use App\Models\Ad;
 use Illuminate\Http\Request;
 use App\Traits\Files;
 
-class BlogsController extends Controller
+class AdsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,14 +18,14 @@ class BlogsController extends Controller
     public function index()
     {
         if(request('per_page'))
-            return $this->generalResponse(Blog::latest()->paginate(request('per_page')));
-        return $this->generalResponse(Blog::latest()->paginate());
+            return $this->generalResponse(Ad::latest()->paginate(request('per_page')));
+        return $this->generalResponse(Ad::latest()->paginate());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBlogRequest $request)
+    public function store(StoreAdRequest $request)
     {
         return $request->store();
     }
@@ -49,10 +49,10 @@ class BlogsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeleteBlogRequest $request, Blog $blog)
+    public function destroy(DeleteAdRequest $request, Ad $ad)
     {
-        $blog->delete();
-        Files::deleteFile(public_path('Images/Blogs' . '/' . $blog->image));
+        $ad->delete();
+        Files::deleteFile(public_path('Images/Ads' . '/' . $ad->image));
         return $this->generalResponse(null, 'Deleted Successfully', 200);
     }
 }

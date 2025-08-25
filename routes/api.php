@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdsController;
 use App\Http\Controllers\BlogsController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,9 @@ Route::middleware('lang')->group(function() {
 
         // Blogs Routes
         Route::apiResource('blogs', BlogsController::class);
+
+        // Ads Routes
+        Route::apiResource('ads', AdsController::class);
     });
 
 
