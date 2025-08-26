@@ -9,4 +9,5 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('login', 'login');
     Route::post('verify-account', 'verify_account');
     Route::post('verify-2fa', 'verify_2fa');
+    Route::post('refresh-token', 'refresh_token');
 });

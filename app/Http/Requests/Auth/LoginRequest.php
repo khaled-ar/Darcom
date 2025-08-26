@@ -49,7 +49,8 @@ class LoginRequest extends FormRequest
                     ? $this->generalResponse(null, 'Whatsapp Check', 201)
                     : $this->generalResponse(null, 'error_400', 400);
             }
-            $user['token'] = $user->createToken($user->whatsapp)->plainTextToken;
+            $user['token'] = $user->createToken('auth_token')->plainTextToken;
+            $user['refresh_token'] = $user->createToken('refresh_token', ['*'], now()->addDays(7))->plainTextToken;
             return $this->generalResponse($user, null, 200);
         }
         return $this->generalResponse(null, 'Wrong Credentials', 401);

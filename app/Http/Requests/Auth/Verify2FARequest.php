@@ -28,7 +28,8 @@ class Verify2FARequest extends FormRequest
         $code = Cache::get($this->whatsapp);
         if($code == $this->code) {
             $user = User::whereWhatsapp($this->whatsapp)->first();
-            $user['token'] = $user->createToken($user->whatsapp)->plainTextToken;
+            $user['token'] = $user->createToken('auth_token')->plainTextToken;
+            $user['refresh_token'] = $user->createToken('refresh_token', ['*'], now()->addDays(7))->plainTextToken;
             Cache::forget($this->whatsapp);
             return $this->generalResponse($user, null, 200);
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\{
     LoginRequest,
+    RefreshTokenRequest,
     RegisterGeneralUserRequest,
     RegisterOfficeRequest,
     Verify2FARequest,
@@ -31,6 +32,10 @@ class AuthController extends Controller
 
     public function verify_2fa(Verify2FARequest $request) {
         return $request->verify_2fa();
+    }
+
+    public function refresh_token(RefreshTokenRequest $request) {
+        return $request->refresh();
     }
 
 }
