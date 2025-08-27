@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\{
+    ForgotPasswordRequest,
     LoginRequest,
     RefreshTokenRequest,
     RegisterGeneralUserRequest,
     RegisterOfficeRequest,
+    ResetPasswordRequest,
     Verify2FARequest,
     VerifyAccountRequest,
+    VerifyCodeRequest,
 };
 
 class AuthController extends Controller
@@ -38,4 +41,19 @@ class AuthController extends Controller
         return $request->refresh();
     }
 
+    public function forgot_password(ForgotPasswordRequest $request) {
+        return $request->send_code();
+    }
+
+    public function reset_password(ResetPasswordRequest $request) {
+        return $request->reset_password();
+    }
+
+    public function resend_code(ForgotPasswordRequest $request) {
+        return $request->send_code();
+    }
+
+    public function verify_code(VerifyCodeRequest $request) {
+        return $request->verify_code();
+    }
 }

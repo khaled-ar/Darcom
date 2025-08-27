@@ -12,8 +12,18 @@ class Office extends Model
 
     protected $hidden = [
         'created_at',
-        'updated_at'
+        'updated_at',
+        'logo'
     ];
+
+    protected $appends = [
+        'logo_url',
+    ];
+
+    public function getLogoUrlAttribute()
+    {
+        return $this->logo ? asset("Images/Logos") . '/' . $this->logo : null;
+    }
 
     public function work_times() {
         return $this->hasMany(WorkTime::class);

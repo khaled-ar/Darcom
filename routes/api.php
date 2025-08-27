@@ -39,5 +39,9 @@ Route::middleware('lang')->group(function() {
         include base_path('routes/Dashboard/cities.php');
         // Regions Routes
         include base_path('routes/Dashboard/regions.php');
+        // General Users Routes
+        include base_path('routes/Dashboard/general.users.php');
+        // Offices Routes
+        include base_path('routes/Dashboard/offices.php');
     });
 });

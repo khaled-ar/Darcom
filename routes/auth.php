@@ -10,4 +10,8 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('verify-account', 'verify_account');
     Route::post('verify-2fa', 'verify_2fa');
     Route::post('refresh-token', 'refresh_token');
+    Route::post('forgot-password', 'forgot_password');
+    Route::post('reset-password', 'reset_password');
+    Route::post('resend-code', 'resend_code')->middleware('throttle:1,2');
+    Route::post('verify-code', 'verify_code');
 });
