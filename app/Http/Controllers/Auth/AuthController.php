@@ -56,4 +56,10 @@ class AuthController extends Controller
     public function verify_code(VerifyCodeRequest $request) {
         return $request->verify_code();
     }
+
+    public function delete_account() {
+        $user = request()->user();
+        $user->delete();
+        return $this->generalResponse(null, 'Deleted Successfully', 200);
+    }
 }

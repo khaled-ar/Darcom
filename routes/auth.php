@@ -14,4 +14,5 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('reset-password', 'reset_password');
     Route::post('resend-code', 'resend_code')->middleware('throttle:1,2');
     Route::post('verify-code', 'verify_code');
+    Route::delete('delete-account', 'delete_account')->middleware('auth:sanctum');
 });
