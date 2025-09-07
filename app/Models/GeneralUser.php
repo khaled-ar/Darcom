@@ -21,7 +21,7 @@ class GeneralUser extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset("Images/Profiles") . '/' . $this->image;
+        return $this->image ? asset("Images/Profiles") . '/' . $this->image : null;
     }
 
     protected static function boot()
