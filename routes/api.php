@@ -17,7 +17,7 @@ Route::middleware('lang')->group(function() {
         include base_path('routes/auth.php');
     });
 
-    Route::middleware('auth:sanctum')->group(function() {
+    Route::middleware(['auth:sanctum', 'whatsapp_verified'])->group(function() {
 
         // Profile Routes
         Route::prefix('profile')->group(function() {

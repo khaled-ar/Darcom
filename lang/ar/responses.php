@@ -14,4 +14,5 @@ return [
     'Wrong Credentials' => 'بيانات تسجيل الدخول غير صحيحة',
     'Updated Successfully' => 'تم التحديث بنجاح',
     'Deleted Successfully' => 'تم الحذف بنجاح',
+    'Your Whatsapp Number Not Verified.' => 'لم يتم تاكيد رقم الواتساب حتى الان'
 ];
