@@ -28,7 +28,7 @@ class StoreCityRequest extends FormRequest
     }
 
     public function store() {
-        City::create($this->validated());
-        return $this->generalResponse(null, '201', 201);
+        $city = City::create($this->validated());
+        return $this->generalResponse($city->id, '201', 201);
     }
 }
