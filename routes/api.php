@@ -29,6 +29,13 @@ Route::middleware('lang')->group(function() {
 
         // Ads Routes
         Route::apiResource('ads', AdsController::class);
+
+        // Office Routes
+        Route::prefix('office')->group(function() {
+            include base_path('routes/Office/profile.php');
+            include base_path('routes/Office/employees.php');
+            include base_path('routes/Office/verifications.php');
+        });
     });
 
 
@@ -43,5 +50,7 @@ Route::middleware('lang')->group(function() {
         include base_path('routes/Dashboard/general.users.php');
         // Offices Routes
         include base_path('routes/Dashboard/offices.php');
+        // Verifications Routes
+        include base_path('routes/Dashboard/verifications.php');
     });
 });

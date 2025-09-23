@@ -33,6 +33,20 @@ class Office extends Model
         return $this->hasMany(SocialLink::class);
     }
 
+    public function employees() {
+        return $this->hasMany(Employee::class);
+    }
+
+    public function verifications() {
+        return $this->hasMany(Verification::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class)->select([
+            'id', '2FA'
+        ]);
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -40,7 +54,7 @@ class Office extends Model
         static::created(function($office) {
             if(request()->hasFile('logo')) {
                 DB::transaction(function() use ($office) {
-                    $logo = Files::moveFile(request('logo'), "Logos");
+                    $logo = Files::moveFile(request('logo'), "Images/Logos");
                     $office->update(['logo' => $logo]);
                     $office->social_links()->create([
                         'whatsapp_link' => request('whatsapp_link'),

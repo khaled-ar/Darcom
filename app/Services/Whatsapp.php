@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Whatsapp {
 
@@ -25,6 +26,7 @@ class Whatsapp {
             Cache::put($number, $code, 60 * 5);
             return true;
         }
+        Log::error($response->body());
         return false;
     }
 }

@@ -14,5 +14,6 @@ return [
     'Wrong Credentials' => 'Wrong Credentials!',
     'Updated Successfully' => 'Updated Successfully',
     'Deleted Successfully' => 'Deleted Successfully',
-    'Your Whatsapp Number Not Verified.' => 'Your Whatsapp Number Not Verified.'
+    'Your Whatsapp Number Not Verified.' => 'Your Whatsapp Number Not Verified.',
+    'The maximum number of employees has been reached.' => 'The maximum number of employees has been reached.'
 ];

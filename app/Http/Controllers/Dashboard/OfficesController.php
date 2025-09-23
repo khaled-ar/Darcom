@@ -15,12 +15,12 @@ class OfficesController extends Controller
     {
         if(request('per_page'))
             return $this->generalResponse(
-                Office::select(['id', 'user_id', 'name', 'logo', 'full_address'])
+                Office::select(['id', 'user_id', 'name', 'logo', 'full_address', 'verified'])
                     ->latest()
                     ->paginate(request('per_page'))
             );
             return $this->generalResponse(
-                Office::select(['id', 'user_id', 'name', 'logo', 'full_address'])
+                Office::select(['id', 'user_id', 'name', 'logo', 'full_address', 'verified'])
                     ->latest()
                     ->paginate()
             );
