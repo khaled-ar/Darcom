@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Office\Employees\{
     AddEmployeeRequest,
 };
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use App\Traits\Files;
 
 class EmployeeController extends Controller
 {
@@ -15,7 +17,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        return $this->generalResponse(request()->user()->office->employees);
     }
 
     /**
@@ -45,8 +47,10 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Employee $employee)
     {
-        //
+        Files::deleteFile(public_path("Images/Profiles/{$employee->image}"));
+        $employee->delete();
+        return $this->generalResponse(null, 'Deleted Successfully', 200);
     }
 }

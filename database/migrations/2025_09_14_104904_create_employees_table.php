@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('position');
             $table->string('image')->nullable();
             $table->integer('max_ads')->nullable();
-            $table->enum('staus', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
