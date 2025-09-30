@@ -52,5 +52,7 @@ Route::middleware('lang')->group(function() {
         include base_path('routes/Dashboard/offices.php');
         // Verifications Routes
         include base_path('routes/Dashboard/verifications.php');
+        // Verifications Routes
+        include base_path('routes/Dashboard/reasons.php');
     });
 });
