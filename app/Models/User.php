@@ -47,4 +47,16 @@ class User extends Authenticatable
     public function office() {
         return $this->hasOne(Office::class);
     }
+
+    public function employee() {
+        return $this->hasOne(Employee::class);
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    public function favorites() {
+        return $this->hasMany(Favorite::class);
+    }
 }

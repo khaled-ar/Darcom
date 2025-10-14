@@ -31,4 +31,12 @@ class ProfileController extends Controller
         $office->work_times()->whereId($work_time->id)->update($data);
         return $this->generalResponse(null, 'Updated Successfully', 200);
     }
+
+    public function add_work_times(Request $request) {
+        $data = $request->validate(['day' => ['required', 'string'], 'start' => ['required', 'string'], 'end' => ['required', 'string']]);
+
+        $office = request()->user()->office;
+        $office->work_times()->create($data);
+        return $this->generalResponse(null, '201', 201);
+    }
 }

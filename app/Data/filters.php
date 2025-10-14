@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'common' => [
+        'direction',
+        'listing_type',
+        'location',
+        'marketing_materials',
+        'mortgageable',
+        'ownership_document_type',
+        'payment_method',
+        'price',
+        'property_description',
+        'property_number',
+        'property_size',
+        'property_type',
+        'proximity_to_public_transport',
+        'real_estate_zone_number',
+        'view',
+        'city'
+    ],
+    'extra' => [
+        'balcony_size',
+        'balcony_or_terrace',
+        'building_type',
+        'dimensions',
+        'disability_access',
+        'dlevators',
+        'floor',
+        'furnishing',
+        'garden',
+        'garden_size',
+        'heating',
+        'number_of_bathrooms',
+        'number_of_floors',
+        'number_of_rooms',
+        'parking',
+        'parking_availability',
+        'property_age',
+        'property_condition',
+        'rented',
+        'security_deposit',
+        'solar_power',
+        'land_type ',
+    ]
+];

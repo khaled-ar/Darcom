@@ -15,5 +15,6 @@ return [
     'Updated Successfully' => 'تم التحديث بنجاح',
     'Deleted Successfully' => 'تم الحذف بنجاح',
     'Your Whatsapp Number Not Verified.' => 'لم يتم تاكيد رقم الواتساب حتى الان',
-    'The maximum number of employees has been reached.' => 'تم الوصول للعدد الاعظمي للموظفين'
+    'The maximum number of employees has been reached.' => 'تم الوصول للعدد الاعظمي للموظفين',
+    'The request has been sent to the manager successfully. The changes will be applied immediately after approval.' => 'تم ارسال الطلب الى المدير بنجاح، سوف يتم تطبيق التغييرات مباشرة بعد الموافقة'
 ];

@@ -15,5 +15,6 @@ return [
     'Updated Successfully' => 'Updated Successfully',
     'Deleted Successfully' => 'Deleted Successfully',
     'Your Whatsapp Number Not Verified.' => 'Your Whatsapp Number Not Verified.',
-    'The maximum number of employees has been reached.' => 'The maximum number of employees has been reached.'
+    'The maximum number of employees has been reached.' => 'The maximum number of employees has been reached.',
+    'The request has been sent to the manager successfully. The changes will be applied immediately after approval.' => 'The request has been sent to the manager successfully. The changes will be applied immediately after approval.'
 ];
