@@ -4,7 +4,8 @@ return [
     'common' => [
         'direction',
         'listing_type',
-        'location',
+        'lon',
+        'lat',
         'marketing_materials',
         'mortgageable',
         'ownership_document_type',
@@ -41,6 +42,6 @@ return [
         'rented',
         'security_deposit',
         'solar_power',
-        'land_type ',
+        'land_type',
     ]
 ];
