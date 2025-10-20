@@ -87,9 +87,4 @@ class Post extends Model
     {
         return $this->belongsTo(User::class)->with(['employee', 'general_user']);
     }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 }
