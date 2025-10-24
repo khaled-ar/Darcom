@@ -26,7 +26,7 @@ return [
         'building_type',
         'dimensions',
         'disability_access',
-        'dlevators',
+        'elevators',
         'floor',
         'furnishing',
         'garden',
