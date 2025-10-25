@@ -34,6 +34,8 @@ class PostsController extends Controller
                     'name' => $post->user->general_user ? $post->user->general_user->fullname : $post->user->employee->fullname,
                     'whatsapp' => $post->user->whatsapp,
                     'phone' => $post->user->whatsapp,
+                    'role' => $post->user->role,
+                    'image_url' => $post->user->role == 'general_user' ? $post->user->general_user->image_url : $post->user->employee->image_url,
                 ];
                 unset($post->user);
                 return $post;
@@ -54,6 +56,8 @@ class PostsController extends Controller
                     'name' => $post->user->general_user ? $post->user->general_user->fullname : $post->user->employee->fullname,
                     'whatsapp' => $post->user->whatsapp,
                     'phone' => $post->user->whatsapp,
+                    'role' => $post->user->role,
+                    'image_url' => $post->user->role == 'general_user' ? $post->user->general_user->image_url : $post->user->employee->image_url,
                 ];
                 unset($post->user);
                 return $post;
@@ -121,5 +125,19 @@ class PostsController extends Controller
         $post->update(['status' => 'active', 'reason' => request('reject_reason') ?? null]);
         return $this->generalResponse(null, 'Updated Successfully', 200);
 
+    }
+
+    public function get_publisher(Post $post) {
+        $publisher = $post->user;
+        $posts = $publisher->posts;
+        if($publisher->role == 'employee') {
+            $user = $publisher->employee->office->load(['work_times', 'social_links']);
+        } else {
+            $user = $publisher->general_user;
+        }
+        return $this->generalResponse([
+            'user' => $user,
+            'posts' => $posts
+        ]);
     }
 }
