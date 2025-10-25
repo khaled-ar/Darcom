@@ -36,7 +36,11 @@ class UpdateCategoryRequest extends FormRequest
             $icon = Files::moveFile($this->icon, 'Images/Icons');
             $data['icon'] = $icon;
         }
-        $category->update($data);
+        if($category->update($data)) {
+            if($this->name) {
+                $category->posts()->update(["columns->property_type" => $this->name]);
+            }
+        }
         return $this->generalResponse($category, 'Updated Successfully', 200);
     }
 }
