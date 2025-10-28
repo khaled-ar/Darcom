@@ -30,33 +30,91 @@ class Post extends Model
 
     public function scopeFilters($query)
     {
-        $filterableColumns = array_keys(json_decode($this->columns, true) ?? []);
+        $filters = include base_path('/app/Data/filters.php');
+        $filterableColumns = array_merge($filters['common'], $filters['extra'], ['listing_date']);
 
-        foreach ($filterableColumns as $column) {
-            if (request()->has($column) && request($column) !== null) {
-                $value = request($column);
+        // Create a whitelist of allowed columns
+        $allowedColumns = array_flip($filterableColumns);
 
-                if (is_array($value)) {
-                    if (isset($value['min']) || isset($value['max'])) {
-                        // Range filter
-                        if (isset($value['min']) && $value['min'] !== '') {
-                            $min = $value['min'];
-                            $query->where("columns->{$column}", '>=', $min);
-                        }
-                        if (isset($value['max']) && $value['max'] !== '') {
-                            $max = $value['max'];
-                            $query->where("columns->{$column}", '<=', $max);
-                        }
-                    }
+        foreach (request()->all() as $param => $value) {
+            // Validate the parameter is allowed
+            if (!isset($allowedColumns[$param]) || $value === null) {
+                continue;
+            }
 
-                } else {
-                    // Single value
-                    $query->where("columns->{$column}", $value);
+            $column = $param; // Now validated
+
+            // Check if this is a range filter (array with min/max keys)
+            if (is_array($value) && $this->isRangeFilter($value)) {
+                $this->applyRangeFilter($query, $column, $value);
+            } else if (!is_array($value)) {
+                // Handle single value with proper type handling
+                $normalizedValue = $this->normalizeValue($value);
+
+                // Only apply LIKE filter if value is not null after normalization
+                if ($normalizedValue !== null) {
+                    $this->applyCaseInsensitiveLike($query, $column, $normalizedValue);
                 }
             }
+            // Ignore other array types
         }
 
         return $query;
+    }
+
+    protected function isRangeFilter($value)
+    {
+        return isset($value['min']) || isset($value['max']);
+    }
+
+    protected function applyCaseInsensitiveLike($query, $column, $value)
+    {
+        // Use a simpler approach with JSON extraction and case conversion
+        $query->where(function($q) use ($column, $value) {
+            $q->whereRaw("LOWER(JSON_EXTRACT(columns, '$.\"{$column}\"')) LIKE ?", ['%' . strtolower($value) . '%'])
+            ->orWhereRaw("LOWER(JSON_EXTRACT(columns, '$.{$column}')) LIKE ?", ['%' . strtolower($value) . '%']);
+        });
+    }
+
+    protected function applyRangeFilter($query, $column, $value)
+    {
+        // Process range filter
+        if (isset($value['min']) && $value['min'] !== '') {
+            $minValue = $this->normalizeValue($value['min']);
+            if ($minValue !== null) {
+                $query->whereRaw('JSON_UNQUOTE(JSON_EXTRACT(columns, ?)) >= ?', ["$.{$column}", $minValue]);
+            }
+        }
+
+        if (isset($value['max']) && $value['max'] !== '') {
+            $maxValue = $this->normalizeValue($value['max']);
+            if ($maxValue !== null) {
+                $query->whereRaw('JSON_UNQUOTE(JSON_EXTRACT(columns, ?)) <= ?', ["$.{$column}", $maxValue]);
+            }
+        }
+    }
+
+    protected function normalizeValue($value)
+    {
+        // Convert empty strings to null
+        if ($value === '' || $value === null) {
+            return null;
+        }
+
+        // Trim whitespace for string values
+        if (is_string($value)) {
+            $value = trim($value);
+            if ($value === '') {
+                return null;
+            }
+        }
+
+        // Convert numeric strings to numbers for range filters
+        if (is_numeric($value)) {
+            return $value + 0; // Converts to int or float
+        }
+
+        return $value;
     }
 
     public function getInFavoriteAttribute()
