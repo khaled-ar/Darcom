@@ -11,6 +11,7 @@ return [
         'ownership_document_type',
         'payment_method',
         'price',
+        'currency',
         'property_description',
         'property_number',
         'property_size',
