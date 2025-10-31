@@ -39,4 +39,9 @@ class ProfileController extends Controller
         $office->work_times()->create($data);
         return $this->generalResponse(null, '201', 201);
     }
+
+    public function delete_work_times(WorkTime $work_time) {
+        $work_time->delete();
+        return $this->generalResponse(null, null, 200);
+    }
 }

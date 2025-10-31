@@ -50,6 +50,10 @@ class StorePostRequest extends FormRequest
         $data = $this->validated();
         if(! isset($data['user_id'])) {
             $data['user_id'] = $this->user()->id;
+        } else {
+            if(!in_array($this->user_id, $this->user()->office->employees()->pluck('user_id')->toArray())) {
+                return $this->generalResponse(null, 'error_400', 400);
+            }
         }
 
         $columns = $data['columns'];

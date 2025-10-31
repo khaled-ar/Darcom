@@ -50,6 +50,7 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         Files::deleteFile(public_path("Images/Profiles/{$employee->image}"));
+        $employee->user()->delete();
         $employee->delete();
         return $this->generalResponse(null, 'Deleted Successfully', 200);
     }
