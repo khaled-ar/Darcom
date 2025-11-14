@@ -5,3 +5,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('posts', PostsController::class);
 Route::get('posts/publisher/{post}', [PostsController::class, 'get_publisher']);
+Route::get('if-post-store-available', [PostsController::class, 'if_store_available']);

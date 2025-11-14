@@ -37,6 +37,10 @@ class Office extends Model
         return $this->hasMany(Employee::class);
     }
 
+    public function ratings() {
+        return $this->hasMany(Rating::class);
+    }
+
     public function verifications() {
         return $this->hasMany(Verification::class);
     }
@@ -45,6 +49,25 @@ class Office extends Model
         return $this->belongsTo(User::class)->select([
             'id', '2FA'
         ]);
+    }
+
+    protected static function booted()
+    {
+        static::retrieved(function ($office) {
+                $ratings = $office->ratings();
+                $count = $ratings->count();
+                $rate = $count > 0 ? number_format($ratings->sum('value') / $count, 1) : "0.0";
+                $rate = $rate > 5 ? "5.0" : $rate;
+                $rate = $rate < 0.5 ? "0.0" : $rate;
+                if ($count >= 1000) {
+                    $units = ['', 'K', 'M', 'B', 'T'];
+                    $pow = floor(($count ? log($count) : 0) / log(1000));
+                    $pow = min($pow, count($units) - 1);
+                    $count /= pow(1000, $pow);
+                    $count = round($count, 1) . ' ' . $units[$pow];
+                }
+                $office->setAttribute('rate', $rate . '|' . $count);
+        });
     }
 
     protected static function boot()

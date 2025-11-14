@@ -7,6 +7,7 @@ use App\Http\Requests\Posts\{
     UpdatePostRequest
 };
 use App\Models\{
+    Employee,
     Post,
     Reason
 };
@@ -23,6 +24,9 @@ class PostsController extends Controller
         $user = request()->user();
 
         if($user->role == 'employee' || ($user->role == 'general_user' && request('my'))) {
+            if(request()->has('status')) {
+                return $this->generalResponse($user->posts()->whereStatus(request('status'))->get());
+            }
             return $this->generalResponse($user->posts);
         }
 
@@ -65,8 +69,21 @@ class PostsController extends Controller
             return $this->generalResponse($posts);
         }
 
-        return $this->generalResponse(Post::category()->whereStatus(request('status'))->with('user')->get());
+        if(request()->has('office_id')) {
+            $employees = Employee::whereOfficeId(request('office_id'))->pluck('user_id')->toArray();
+            return $this->generalResponse(Post::category()
+                                            ->whereIn('user_id', $employees)
+                                            ->select(['id', 'user_id', 'images', "columns->city as city"])
+                                            ->paginate()
+                                            ->through(function($post) {
+                                                return $post->makeHidden(['videos_urls', 'columns_values', 'in_favorite']);
+                                            })
+                                        );
+        }
+        if(request()->has('id'))
+            return $this->generalResponse(Post::whereId(request('id'))->with('user')->first());
 
+        return $this->generalResponse(Post::category()->whereStatus(request('status'))->with('user')->get());
     }
 
     /**
@@ -139,5 +156,45 @@ class PostsController extends Controller
             'user' => $user,
             'posts' => $posts
         ]);
+    }
+
+    public function if_store_available(Request $request) {
+
+        $user = $request->user();
+        if($user->role == 'general_user') {
+            $subscription = json_decode($user->subscription ?-> values);
+            $available_posts = $subscription ?-> posts_number;
+            $can_add_as_featured = $subscription ?-> featured_posts_number;
+            $pending_posts = $user->posts()->whereStatus('pending')->count();
+            return $this->generalResponse([
+                'can_add_post' => $available_posts > $pending_posts,
+                'can_add_as_featured' => $can_add_as_featured > 0
+            ]);
+        }
+
+        if($user->role == 'employee') {
+            $office = $user->employee->office;
+            $subscription = json_decode($office->user->subscription ?-> values);
+            $available_posts = $subscription ?-> posts_number;
+            $can_add_as_featured = $subscription ?-> featured_posts_number;
+            $employees = $office->employees()->pluck('user_id')->toArray();
+            $pending_posts = Post::whereStatus('pending')->whereIn('user_id', $employees)->count();
+            return $this->generalResponse([
+                'can_add_post' => $available_posts > $pending_posts,
+                'can_add_as_featured' => $can_add_as_featured > 0
+            ]);
+        }
+
+        if($user->role == 'office') {
+            $subscription = json_decode($user->subscription ?-> values);
+            $available_posts = $subscription ?-> posts_number;
+            $can_add_as_featured = $subscription ?-> featured_posts_number;
+            $employees = $user->office->employees()->pluck('user_id')->toArray();
+            $pending_posts = Post::whereStatus('pending')->whereIn('user_id', $employees)->count();
+            return $this->generalResponse([
+                'can_add_post' => $available_posts > $pending_posts,
+                'can_add_as_featured' => $can_add_as_featured > 0
+            ]);
+        }
     }
 }

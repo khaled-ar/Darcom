@@ -43,6 +43,9 @@ class LoginRequest extends FormRequest
     public function check() {
         if($this->authenticate()) {
             $user = User::whereWhatsapp($this->whatsapp)->first();
+            $user->fcm = request()->header('fcm');
+            $user->save();
+
             if($user['2FA']) {
                 $res = Whatsapp::send_code($this->whatsapp);
                 return $res
