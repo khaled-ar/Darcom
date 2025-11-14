@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Office;
 use Illuminate\Http\Request;
+use App\Traits\Files;
 
 class OfficesController extends Controller
 {
@@ -15,15 +17,15 @@ class OfficesController extends Controller
     {
         if(request('per_page'))
             return $this->generalResponse(
-                Office::select(['id', 'user_id', 'name', 'logo', 'full_address', 'verified'])
+                Office::select(['id', 'user_id', 'name', 'logo', 'full_address'])
                     ->latest()
                     ->paginate(request('per_page'))
             );
-            return $this->generalResponse(
-                Office::select(['id', 'user_id', 'name', 'logo', 'full_address', 'verified'])
-                    ->latest()
-                    ->paginate()
-            );
+        return $this->generalResponse(
+            Office::select(['id', 'user_id', 'name', 'logo', 'full_address'])
+                ->latest()
+                ->paginate()
+        );
     }
 
     /**
@@ -53,8 +55,20 @@ class OfficesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Office $office)
     {
-        //
+        Files::deleteFile(public_path("Images/Logos/{$office->logo}"));
+        $office->user()->delete();
+        return $this->generalResponse(null, 'Deleted Successfully', 200);
+    }
+
+    public function get_employees() {
+        return $this->generalResponse(
+            Employee::select(['id', 'user_id', 'office_id', 'fullname', 'image'])
+                ->whereOfficeId(request('office_id'))
+                ->with('user:id,whatsapp')
+                ->latest()
+                ->get()
+        );
     }
 }

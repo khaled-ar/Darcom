@@ -23,16 +23,24 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = $this->user();
+        if(in_array($user->role, ['general_user', 'office'])) {
+            $values = json_decode($user->subscription->values);
+        } else {
+            $values = json_decode($user->employee->office->user->subscription->values);
+        }
+
         return [
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'user_id' => $this->get_validation(),
             'title' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:1000'],
+            'is_featured' => ['nullable', 'boolean'],
             'columns' => ['required', 'array'],
             'columns.*' => ['string'],
-            'images' => ['required', 'array'],
+            'images' => ['required', 'array', 'max:' . $values->images_number],
             'images.*' => ['image', 'mimes:png,jpg', 'max:5120'],
-            'videos' => ['required', 'array'],
+            'videos' => ['required', 'array', 'max:' . $values->videos_number],
             'videos.*' => ['file', 'mimes:mp4,m4a', 'max:5120'],
         ];
     }
@@ -47,11 +55,18 @@ class StorePostRequest extends FormRequest
     }
 
     public function store() {
+        $user = $this->user();
         $data = $this->validated();
         if(! isset($data['user_id'])) {
-            $data['user_id'] = $this->user()->id;
+            $data['user_id'] = $user->id;
+            if($user->role == 'employee') {
+                $posts = $user->posts()->whereIn('status', ['active', 'to_update', 'pending'])->count();
+                if($posts >= $user->employee->max_ads) {
+                    return $this->generalResponse(null, 'The maximum number of ads has been reached.', 400);
+                }
+            }
         } else {
-            if(!in_array($this->user_id, $this->user()->office->employees()->pluck('user_id')->toArray())) {
+            if(!in_array($this->user_id, $user->office->employees()->pluck('user_id')->toArray())) {
                 return $this->generalResponse(null, 'error_400', 400);
             }
         }

@@ -16,5 +16,10 @@ return [
     'Deleted Successfully' => 'Deleted Successfully',
     'Your Whatsapp Number Not Verified.' => 'Your Whatsapp Number Not Verified.',
     'The maximum number of employees has been reached.' => 'The maximum number of employees has been reached.',
-    'The request has been sent to the manager successfully. The changes will be applied immediately after approval.' => 'The request has been sent to the manager successfully. The changes will be applied immediately after approval.'
+    'The request has been sent to the manager successfully. The changes will be applied immediately after approval.' => 'The request has been sent to the manager successfully. The changes will be applied immediately after approval.',
+    'The maximum number of ads has been reached.' => 'The maximum number of ads has been reached.',
+    'The request has been sent to the manager successfully.' => 'The request has been sent to the manager successfully.',
+    'No more than three posts can be added.' => 'No more than three posts can be added.',
+    'You cannot book an appointment because you already have one. Please wait two days from the date of your current appointment.' => 'You cannot book an appointment because you already have one. Please wait two days from the date of your current appointment.',
+    'Editing is not possible while awaiting manager approval.' => 'Editing is not possible while awaiting manager approval.'
 ];

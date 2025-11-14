@@ -5,6 +5,7 @@ namespace App\Http\Requests\Posts;
 use App\Models\Reason;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\Files;
+use Illuminate\Support\Facades\DB;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -48,8 +49,28 @@ class UpdatePostRequest extends FormRequest
     public function update($post) {
 
         if(request()->user()->role == 'admin') {
-            $post->update(['status' => $this->status, 'reason' => $this->reject_reason ?? null]);
-            return $this->generalResponse(null, 'Updated Successfully', 200);
+            return DB::transaction(function () use($post) {
+                $post->update(['status' => $this->status, 'reason' => $this->reject_reason ?? null]);
+                if($this->status == 'active') {
+                    $post_owner = $post->user;
+                    if($post_owner->role == 'general_user') {
+                        $post_owner->subscription()->decrement('values->posts_number');
+                        if($post->is_featured) {
+                            $post_owner->subscription()->decrement('values->featured_posts_number');
+                        }
+                    } else {
+                        $post_owner->employee->office->user->subscription()->decrement('values->posts_number');
+                        if($post->is_featured) {
+                            $post_owner->employee->office->user->subscription()->decrement('values->featured_posts_number');
+                        }
+                    }
+                }
+                return $this->generalResponse(null, 'Updated Successfully', 200);
+            });
+        }
+
+        if($post->status == 'pending') {
+            return $this->generalResponse(null, 'Editing is not possible while awaiting manager approval.', 400);
         }
 
         $data = $this->validated();
@@ -60,6 +81,7 @@ class UpdatePostRequest extends FormRequest
             $current_columns = $post->columns_values;
             foreach($columns as $column) {
                 $column = explode(",", $column);
+                if($this->user()->role == 'employee' && $column[0] == 'property_type') continue;
                 $current_columns->{$column[0]} = $column[1];
             }
             $data['columns'] = json_encode($current_columns);

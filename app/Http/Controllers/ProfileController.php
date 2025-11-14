@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Profile\UpdateGeneralUserProfileRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -31,6 +33,37 @@ class ProfileController extends Controller
         $user = $request->user();
         if($user->role == 'general_user')
             return $this->generalResponse($user->load('general_user'));
+
+        if($user->role == 'employee') {
+            $user->load('employee');
+            return $this->generalResponse([
+                'id' => $user->employee->id,
+                'user_id' => $user->id,
+                'office_id' => $user->employee->office_id,
+                'image_url' => $user->employee->image_url,
+                'fullname' => $user->employee->fullname,
+                'whatsapp' => $user->whatsapp,
+                'office' => $user->employee->office->name,
+            ]);
+        }
+    }
+
+    public function update_employee(Request $request)
+    {
+        if($request->user()->role != 'employee')
+            return $this->generalResponse(null, null, 400);
+
+        $password = $request->validate(['password' => [
+            'required', 'string', 'confirmed', Password::min(8)
+                    ->max(25)
+                    ->numbers()
+                    ->symbols()
+                    ->mixedCase()
+                    ->uncompromised()
+                    ]])['password'];
+
+        $request->user()->update(['password' => Hash::make($password)]);
+        return $this->generalResponse(null);
     }
 
     /**

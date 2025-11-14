@@ -25,6 +25,7 @@ class User extends Authenticatable
         'remember_token',
         'created_at',
         'updated_at',
+        'fcm'
     ];
 
     /**
@@ -56,7 +57,19 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function posts_comparisons() {
+        return $this->hasMany(PostComparison::class)->with('post');
+    }
+
+    public function paths() {
+        return $this->hasMany(Path::class);
+    }
+
     public function favorites() {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function subscription() {
+        return $this->hasOne(Subscription::class)->where('status', 'active');
     }
 }

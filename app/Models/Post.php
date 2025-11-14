@@ -71,8 +71,8 @@ class Post extends Model
     {
         // Use a simpler approach with JSON extraction and case conversion
         $query->where(function($q) use ($column, $value) {
-            $q->whereRaw("LOWER(JSON_EXTRACT(columns, '$.\"{$column}\"')) LIKE ?", ['%' . strtolower($value) . '%'])
-            ->orWhereRaw("LOWER(JSON_EXTRACT(columns, '$.{$column}')) LIKE ?", ['%' . strtolower($value) . '%']);
+            $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(columns, '$.\"{$column}\"')) COLLATE utf8mb4_unicode_ci LIKE ?", ['%' . $value . '%'])
+                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(columns, '$.{$column}')) COLLATE utf8mb4_unicode_ci LIKE ?", ['%' . $value . '%']);
         });
     }
 
